@@ -1,0 +1,43 @@
+<app-alert *ngIf="showAlert" [color]="alertColor">{{alertMsg}}</app-alert>
+<form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+  <!-- Name -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Name</label>
+    <app-input [control]="registerForm.controls.name" [errorMsg]="nameErrorMsg" [placeholder]="'Enter name'"
+      [type]="'text'"></app-input>
+  </div>
+  <!-- Email -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Email</label>
+    <app-input [control]="registerForm.controls.email" [errorMsg]="emailErrorMsg" [placeholder]="'example@email.com'"
+      [type]="'email'"></app-input>
+  </div>
+  <!-- Age -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Age</label>
+    <app-input [control]="registerForm.controls.age" [errorMsg]="ageErrorMsg" [placeholder]="'Enter your age'"
+      [type]="'text'"></app-input>
+  </div>
+  <!-- Password -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Password</label>
+    <app-input [control]="registerForm.controls.password" [errorMsg]="passwordErrorMsg"
+      [placeholder]="'Must contain at least 8 characters'" type="password"></app-input>
+  </div>
+  <!-- Confirm Password -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Confirm Password</label>
+    <app-input [control]="registerForm.controls.confirmPass" [errorMsg]="confirmPassErrorMsg"
+      type="password"></app-input>
+  </div>
+  <!-- Phone Number -->
+  <div class="mb-3">
+    <label class="inline-block mb-2">Phone Number</label>
+    <app-input [control]="registerForm.controls.phone" [errorMsg]="phoneErrorMsg" [placeholder]="'+56 9 12345678'"
+      inputMask="+00 0 00000000" [type]="'text'" [dropSpecialCharacteres]="false"></app-input>
+  </div>
+  <button type="submit" [disabled]="invalidForm" class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition
+hover:bg-indigo-500 disabled:opacity-50 disabled:bg-indigo-400">
+    Submit
+  </button>
+</form>
