@@ -109,4 +109,11 @@ to the root of the HTML. app root.
 
 
 - Firebase
-    - 
+    - When installing AngularFire:  To get rid of these errors, you must update the tsconfig.json file.
+
+    '{ "compilerOptions": { "skipLibCheck": true, } }'
+    The skipLibCheck setting stops TypeScript from type-checking files in the node_modules directory. However, type-checking will remain enabled for code in the src directory, so you still benefit from type-checking. Be sure to add this option to your configuration before proceeding.
+
+    - The main difference between npm i and ng add its that ng add installs and pre-configures more options inside angular than npm, npm just installs a package and adds it to package.json file.  
+    
+    ![alt text](image-2.png)
