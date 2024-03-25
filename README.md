@@ -96,5 +96,17 @@ to the root of the HTML. app root.
 - RxJS: 
     - Async operations
     - Coordinates the DATA received by the component with a series functions and methods optimized for this, like filters, mapping, reducers and sorters. 
-    - 
+    - Like in the image, you can call observables and managing them using the main events: next, complete and error.
+    When you call complete, the observable will stop emiting values. When you call next, you will emit a value, and when you emit the error, the observable will stop emiting values and emit only the error.
+        ![alt text](image.png)
+    
+    - You can clear an interval by calling clearInterval function and passing the interval ID, this is for cleaning memory leaks like the console.log on line "6". 
+    ![alt text](image-1.png)
 
+    - Imperative programming focuses on the HOW, while Declarative focuses on the WHAT. 
+        - Imperative its when you have to tell instructions specifically to a software. 
+        - Declarative its when you use a function to resolve multiple instructions at once. Like the reduce() function of JS, instead of using a FOR loop to move through an array.
+
+
+- Firebase
+    - 
