@@ -36,7 +36,7 @@
     <app-input [control]="registerForm.controls.phone" [errorMsg]="phoneErrorMsg" [placeholder]="'+56 9 12345678'"
       inputMask="+00 0 00000000" [type]="'text'" [dropSpecialCharacteres]="false"></app-input>
   </div>
-  <button type="submit" [disabled]="invalidForm" class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition
+  <button type="submit" [disabled]="invalidForm || inSubmission" class="block w-full bg-indigo-400 text-white py-1.5 px-3 rounded transition
 hover:bg-indigo-500 disabled:opacity-50 disabled:bg-indigo-400">
     Submit
   </button>

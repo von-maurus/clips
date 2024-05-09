@@ -26,7 +26,7 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
-## Stuff learned on the project
+## Concepts adquired on the project
 
 - Tailwind: a CSS framework for rapid development with an utility-first approach.
     - For example, the problem with Bootstrap is that it delivers ready made components to re-use and all apps looks almost the same. It scales poorly when the number of custom classes increase. 
@@ -117,3 +117,34 @@ to the root of the HTML. app root.
     - The main difference between npm i and ng add its that ng add installs and pre-configures more options inside angular than npm, npm just installs a package and adds it to package.json file.  
     
     ![alt text](image-2.png)
+
+    - Buckets are basically databases that stores collections. You can create multiple buckets if you are a premium user in GCP or Firebase.
+
+    - Interfaces VS Classes: Basically, a model its an interface, this is the same, but if you create an interface that IT'S NOT SAVED ON A DB, its not a model, just an interface. Both are typed checked, but a class can accept methods and more complex data structures, getters and setters, while Interfaces not.  Also a class increases the bundle size more than an interface does. Keep that in mind. Interfaces are also a typescript native while Classes are from Javascript & TS, Interfaces cannot be TRANSPILED.
+
+    - Firebase use stateless authentication because it doesn't keep track of the logged user, it just use a token.
+
+    - The "$" dollar sign next to the name variable ("example$"), means that its an observable, used as a common practice. (Good Practice)
+
+    - You can initialize Firebase before Angular, for speeding the rendering conditional a logged user. 
+        - For doing this you need to use de Javascript SDK of firebase instead of AngularFire. [GUIDE](https://firebase.google.com/docs/web/setup)
+
+    - JWT: encoded strings with important credential data. Digitally signed by Firebase.
+        - It's not something you create on frontend, but of course for simplicity or testing you can ;).
+        - It is possible to steal a token, YES. Thats why you need SSL certificaction and HTTPS secured protocole inside on your web app. This will secure the connection between client and server. 
+        - The SECRET its the KEY to unlock the content and hack, the secret its not shared only the hashed code that you can decrypt with any algorith SHA256, RSA, ETC.
+        - SSL or TLS are the protocols to encrypt the data on the network. 
+        - This is a backend issue more so. 
+    
+    - Custom Form Validators: 
+        - With static functions inside a Class, you can access them easily using ClassName.function(), no need to create a "new" instance of the class. 
+        - Static methods don't have access to class properties.
+        - Factory Functions: are a pattern to return objects or functions.
+        - The @Injectable decorator works for inject services into the constructor function of a class. If you pass an object parameter with the "providerIn" parameter, you can choose in what "module" of the project can be injected, to availability in all modules you can write "root" as value.
+        - Async Validators: for a validation that requires a promise or request to be resolve first. 
+        - For good practice, separate Async and Sync validators from each other in order to mantain simplicity on the validation file. 
+        - Eyes on this!: Angular doesn't trigger async validators until all sync validators are valid, take note on that.
+
+
+
+

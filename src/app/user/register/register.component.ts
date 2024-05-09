@@ -1,28 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import IUser from 'src/app/models/user.model';
+import { AuthService } from 'src/app/services/auth.service';
+import { ModalService } from 'src/app/services/modal.service';
+import { RegisterValidators } from '../validators/register-validators';
+import { EmailTaken } from '../validators/email-taken';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
+  constructor(private auth: AuthService, private emailTaken: EmailTaken, private modalService: ModalService) { }
 
   // - at least 8 characters
   // - must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number
   // - Can contain special characters
   private pwdRegEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-
-
   public registerForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    age: new FormControl('', [Validators.required, Validators.min(18), Validators.max(120)]),
+    email: new FormControl('', [Validators.required, Validators.email], [this.emailTaken.validate]),
+    age: new FormControl<number | null>(null, [Validators.required, Validators.min(18), Validators.max(120)]),
     password: new FormControl('', [Validators.required, Validators.pattern(this.pwdRegEx)]),
     confirmPass: new FormControl('', [Validators.required,]),
     phone: new FormControl('', [Validators.required, Validators.minLength(9), Validators.maxLength(14)]),
-  });
-
+  }, [RegisterValidators.match('password', 'confirmPass')]);
+  public inSubmission = false;
   public showAlert: boolean = false;
   public alertColor = 'blue';
   public alertMsg = 'Please wait! Your account is been created.';
@@ -30,7 +36,6 @@ export class RegisterComponent {
   public get invalidForm(): boolean {
     return this.registerForm.invalid;
   }
-
   public get nameErrorMsg(): string {
     const isDirty = this.registerForm.controls.name.dirty && this.registerForm.controls.name.touched;
     const trimmedValue = this.registerForm.controls.name.value?.trim();
@@ -40,12 +45,12 @@ export class RegisterComponent {
     }
     return '';
   }
-
   public get emailErrorMsg(): string {
     const isDirty = this.registerForm.controls.email.dirty && this.registerForm.controls.email.touched;
     if (isDirty) {
       if (this.registerForm.controls.email.errors?.required) return 'This is a required field.';
       if (this.registerForm.controls.email.errors?.email) return 'Enter a valid email.';
+      if (this.registerForm.controls.email.errors?.emailTaken) return 'Email taken, please choose another one.';
     }
     return '';
   }
@@ -69,6 +74,7 @@ export class RegisterComponent {
     const isDirty = this.registerForm.controls.confirmPass.dirty && this.registerForm.controls.confirmPass.touched;
     if (isDirty) {
       if (this.registerForm.controls.confirmPass.errors?.required) return 'This is a required field.';
+      if (this.registerForm.errors?.noMatch) return "Passwords do not match";
     }
     return '';
   }
@@ -81,6 +87,10 @@ export class RegisterComponent {
     return '';
   }
 
+  ngOnInit(): void {
+
+  }
+
   confirmPasswordValidator(formGroup: FormGroup) {
     const password = formGroup.get('password')?.value || '';
     const confirmPassword = formGroup.get('confirmPass')?.value || '';
@@ -88,9 +98,22 @@ export class RegisterComponent {
     return password === confirmPassword ? null : { notMatched: true };
   }
 
-  onRegister() {
+  async onRegister() {
+    this.inSubmission = true;
     this.showAlert = true;
-    this.alertColor = 'blue';
-    this.alertMsg = 'Please wait! Your account is been created.';
+    try {
+      await this.auth.createUser(this.registerForm.value as IUser);
+    } catch (error) {
+      this.alertMsg = 'An unexpected error occured, please try again.';
+      this.alertColor = 'red';
+      this.inSubmission = false;
+      console.error(error);
+      return;
+    }
+    this.inSubmission = false;
+    this.alertColor = 'green';
+    this.alertMsg = 'Account successfully created!';
+    this.modalService.toggleModal('auth');
+    this.modalService.unregister('auth');
   }
 }
